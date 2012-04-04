@@ -62,7 +62,7 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>controlib-utility</artifactId>
+      <artifactId>controlib-server</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
