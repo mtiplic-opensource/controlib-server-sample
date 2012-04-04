@@ -15,10 +15,13 @@ public class App
   public static void main(String[] args) throws Exception
   {
     ServerSocket socket = new ServerSocket(4200);
-    Socket ss = socket.accept();
+    while (true)
+    {
+      Socket ss = socket.accept();
 
-    DemoObserver observer = new DemoObserver();
-    ObjectReceiver receiver = new ObjectReceiver(ss.getInputStream(), observer);
-    receiver.run();
+      DemoObserver observer = new DemoObserver();
+      ObjectReceiver receiver = new ObjectReceiver(ss.getInputStream(), observer);
+      receiver.run();
+    }
   }
 }
