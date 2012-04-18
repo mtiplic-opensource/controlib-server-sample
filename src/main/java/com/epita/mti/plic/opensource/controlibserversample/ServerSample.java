@@ -9,6 +9,7 @@ import com.epita.mti.plic.opensource.controlibserversample.observer.MouseObserve
 import com.epita.mti.plic.opensource.controlibserversample.view.ServerView;
 import com.epita.mti.plic.opensource.controlibutility.serialization.ObjectReceiver;
 import java.awt.AWTException;
+import java.awt.Frame;
 import java.awt.SystemTray;
 import java.io.IOException;
 import java.net.Socket;
@@ -26,8 +27,9 @@ public class ServerSample
 
   public final static int PORT = 4200;
   private static ConnectionManager connectionManager = new ConnectionManager();
-  private static ServerView serverView = new ServerView();
-
+  private static ServerView serverView = new ServerView(); 
+  private static Frame qrcodeView = null;
+          
   public static void main(String[] args)
   {
     try
@@ -36,10 +38,11 @@ public class ServerSample
       connectionManager.openConnection(PORT);
 
       tray.add(serverView.getTrayIcon());
-      
+
       while (true)
       {
         Socket ss = connectionManager.getServer().accept();
+        closeQrcodeView();
         MouseObserver observer = new MouseObserver();
         ObjectReceiver receiver = new ObjectReceiver(ss, observer);
         new Thread(receiver).start();
@@ -64,5 +67,16 @@ public class ServerSample
       return null;
     }
     return ninterface.get("IPV4");
+  }
+  
+  public static void setQrcodeView(Frame f)
+  {
+    qrcodeView = f;
+  }
+  
+  public static void closeQrcodeView()
+  {
+    qrcodeView.dispose();
+    qrcodeView = null;
   }
 }

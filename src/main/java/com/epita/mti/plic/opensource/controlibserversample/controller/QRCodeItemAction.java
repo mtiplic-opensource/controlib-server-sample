@@ -6,6 +6,7 @@ package com.epita.mti.plic.opensource.controlibserversample.controller;
 
 import com.epita.mti.plic.opensource.controlibserver.qrcode.QrcodeGenerator;
 import com.epita.mti.plic.opensource.controlibserversample.ServerSample;
+import com.epita.mti.plic.opensource.controlibserversample.view.QRCodeView;
 import com.google.zxing.WriterException;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -38,10 +39,7 @@ public class QRCodeItemAction implements ActionListener
       if (ipv4 != null)
       {
         BufferedImage qrcode = QrcodeGenerator.generateQrcode(ipv4, port, WIDTH, HEIGHT);
-        Graphics2D g = qrcode.createGraphics();
-        ImageIcon icon = new ImageIcon();
-        icon.setImage(qrcode);
-        JOptionPane.showMessageDialog(null, icon);
+        ServerSample.setQrcodeView(new QRCodeView(qrcode));
       }
     }
     catch (WriterException ex)
