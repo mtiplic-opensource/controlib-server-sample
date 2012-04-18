@@ -33,7 +33,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>com.epita.mti.plic.opensource.controlibserversample.App</mainClass>
+              <mainClass>com.epita.mti.plic.opensource.controlibserversample.ServerSample</mainClass>
             </manifest>
           </archive>
         </configuration>

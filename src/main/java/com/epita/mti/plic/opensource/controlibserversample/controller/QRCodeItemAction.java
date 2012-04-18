@@ -1,0 +1,56 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.epita.mti.plic.opensource.controlibserversample.controller;
+
+import com.epita.mti.plic.opensource.controlibserver.qrcode.QrcodeGenerator;
+import com.epita.mti.plic.opensource.controlibserversample.ServerSample;
+import com.google.zxing.WriterException;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author Julien "Roulyo" Fraisse
+ */
+public class QRCodeItemAction implements ActionListener
+{
+
+  private final int WIDTH = 200;
+  private final int HEIGHT = 200;
+
+  @Override
+  public void actionPerformed(ActionEvent e)
+  {
+    try
+    {
+      String ipv4 = ServerSample.getIPV4("wlan0");
+      int port = ServerSample.PORT;
+
+      if (ipv4 != null)
+      {
+        BufferedImage qrcode = QrcodeGenerator.generateQrcode(ipv4, port, WIDTH, HEIGHT);
+        Graphics2D g = qrcode.createGraphics();
+        ImageIcon icon = new ImageIcon();
+        icon.setImage(qrcode);
+        JOptionPane.showMessageDialog(null, icon);
+      }
+    }
+    catch (WriterException ex)
+    {
+      Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    catch (SocketException ex)
+    {
+      Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
+}
