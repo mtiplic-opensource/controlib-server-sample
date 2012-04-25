@@ -35,13 +35,14 @@ public class ServerView
     popUp = new PopupMenu();
     try
     {
-      trayIcon = new TrayIcon(ImageIO.read(new File("../asset/MTI-Logo.png")));
+      trayIcon = new TrayIcon(ImageIO.read(new File("asset/controlib-logo.png")));
+      trayIcon.setImageAutoSize(true);
     }
     catch (IOException ex)
     {
-      trayIcon = new TrayIcon(new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB));
+      trayIcon = new TrayIcon(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB));
     }
-    qrcodeItem = new MenuItem("Show QRCode");
+    qrcodeItem = new MenuItem("Connect new device...");
     exitItem = new MenuItem("Exit");
 
     // Add listeners
@@ -50,6 +51,7 @@ public class ServerView
 
     // Add materials
     popUp.add(qrcodeItem);
+    popUp.addSeparator();
     popUp.add(exitItem);
 
     trayIcon.setPopupMenu(popUp);
