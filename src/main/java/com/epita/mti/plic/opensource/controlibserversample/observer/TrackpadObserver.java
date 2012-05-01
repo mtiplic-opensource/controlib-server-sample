@@ -5,13 +5,11 @@
 
 package com.epita.mti.plic.opensource.controlibserversample.observer;
 
-import com.epita.mti.plic.opensource.controlibutility.beans.CLButtonPressure;
 import com.epita.mti.plic.opensource.controlibutility.beans.CLVector;
 import com.epita.mti.plic.opensource.controlibutility.serialization.CLSerializable;
 import java.awt.AWTException;
 import java.awt.MouseInfo;
 import java.awt.Robot;
-import java.awt.event.InputEvent;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -38,9 +36,9 @@ public class TrackpadObserver implements Observer
       mouseX = MouseInfo.getPointerInfo().getLocation().x;
       mouseY = MouseInfo.getPointerInfo().getLocation().y;
 
-      Double x = ((CLVector) arg).getX();
-      Double y = ((CLVector) arg).getY();
-      robot.mouseMove((int) Math.round(mouseX + x), (int) Math.round(mouseY + y));
+      float x = ((CLVector) arg).getX();
+      float y = ((CLVector) arg).getY();
+      robot.mouseMove(Math.round(mouseX + x), Math.round(mouseY + y));
     }
   }
 }
