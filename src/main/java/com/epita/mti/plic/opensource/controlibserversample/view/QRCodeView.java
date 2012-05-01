@@ -1,8 +1,16 @@
 package com.epita.mti.plic.opensource.controlibserversample.view;
 
+import com.epita.mti.plic.opensource.controlibserver.qrcode.QrcodeGenerator;
+import com.epita.mti.plic.opensource.controlibserversample.ServerSample;
+import com.epita.mti.plic.opensource.controlibserversample.controller.SelectInterfaceAction;
+import com.google.zxing.WriterException;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.SampleModel;
+import java.net.SocketException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -11,19 +19,32 @@ import java.awt.event.WindowEvent;
 public class QRCodeView extends Frame
 {
 
-  Image img;
+  private Image img;
+  private HashMap<String, HashMap<String, String>> interfaces;
 
-  public QRCodeView(Image qrcode)
+  public QRCodeView() throws SocketException, WriterException
   {
     super("QRCode");
-    MediaTracker mt = new MediaTracker(this);
-    Dimension dim = getToolkit().getScreenSize();
 
-    img = qrcode;
+    Choice selector = new Choice();
+    Dimension dim = getToolkit().getScreenSize();
+    MediaTracker mt = new MediaTracker(this);
+
+    interfaces = ServerSample.getConnectionManager().getInterfaces();
+    for (Map.Entry<String, HashMap<String, String>> entry : interfaces.entrySet())
+    {
+      String string = entry.getKey();
+      selector.add(string);
+    }
+
+    img = QrcodeGenerator.generateQrcode(selector.getSelectedItem(), ServerSample.PORT, 200, 200);
     mt.addImage(img, 0);
-    setSize(220, 220);
+
+    setLayout(null);
+    setSize(220, 245);
     setLocation((dim.width - getBounds().width) / 2, (dim.height - getBounds().height) / 2);
     setVisible(true);
+
     addWindowListener(new WindowAdapter()
     {
 
@@ -33,6 +54,12 @@ public class QRCodeView extends Frame
         dispose();
       }
     });
+
+    selector.setSize(200, 20);
+    selector.setLocation(10, 215);
+    selector.addItemListener(new SelectInterfaceAction(this));
+ 
+    add(selector);
   }
 
   @Override
@@ -52,5 +79,11 @@ public class QRCodeView extends Frame
     {
       g.clearRect(0, 0, getSize().width, getSize().height);
     }
+  }
+
+  public void setQrcode(String ninterface) throws WriterException
+  {
+    img = QrcodeGenerator.generateQrcode(ninterface, ServerSample.PORT, 200, 200);
+    update(getGraphics());
   }
 }
