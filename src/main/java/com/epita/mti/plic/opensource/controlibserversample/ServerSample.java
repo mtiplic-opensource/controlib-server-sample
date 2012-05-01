@@ -60,16 +60,10 @@ public class ServerSample
       Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
-
-  public static String getIPV4(String networkInterface) throws SocketException
+  
+  public static ConnectionManager getConnectionManager()
   {
-    HashMap<String, String> ninterface = connectionManager.getInterfaces().get(networkInterface);
-    if (ninterface == null)
-    {
-      System.err.println("The interface " + networkInterface + " was not found.");
-      return null;
-    }
-    return ninterface.get("IPV4");
+    return connectionManager;
   }
 
   public static void setQrcodeView(Frame f)
