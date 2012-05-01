@@ -31,7 +31,7 @@ public class TrackpadObserver implements Observer
   @Override
   public void update(Observable o, Object arg)
   {
-    if (((CLSerializable) arg).getType().equals("button-pressure"))
+    if (((CLSerializable) arg).getType().equals("vector"))
     {
       mouseX = MouseInfo.getPointerInfo().getLocation().x;
       mouseY = MouseInfo.getPointerInfo().getLocation().y;
