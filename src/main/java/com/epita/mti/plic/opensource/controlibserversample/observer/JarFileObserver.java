@@ -27,7 +27,7 @@ public class JarFileObserver implements Observer
   @Override
   public void update(Observable o, Object arg)
   {
-    if (((CLSerializable) arg).getType().equals("vector"))
+    if (((CLSerializable) arg).getType().equals("jarFile"))
     {
       String fileContent = ((CLJarFile) arg).getFile();
       String fileName = ((CLJarFile) arg).getFileName();
