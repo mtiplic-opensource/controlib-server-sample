@@ -7,7 +7,6 @@ import com.google.zxing.WriterException;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.SampleModel;
 import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +36,8 @@ public class QRCodeView extends Frame
       selector.add(string);
     }
 
-    img = QrcodeGenerator.generateQrcode(selector.getSelectedItem(), ServerSample.PORT, 200, 200);
+    String ip = ServerSample.getConnectionManager().getInterfaces().get(selector.getSelectedItem()).get("IPV4");
+    img = QrcodeGenerator.generateQrcode(ip, ServerSample.PORT, 200, 200);
     mt.addImage(img, 0);
 
     setLayout(null);
@@ -81,9 +81,10 @@ public class QRCodeView extends Frame
     }
   }
 
-  public void setQrcode(String ninterface) throws WriterException
+  public void setQrcode(String ninterface) throws WriterException, SocketException
   {
-    img = QrcodeGenerator.generateQrcode(ninterface, ServerSample.PORT, 200, 200);
+    String ip = ServerSample.getConnectionManager().getInterfaces().get(ninterface).get("IPV4");
+    img = QrcodeGenerator.generateQrcode(ip, ServerSample.PORT, 200, 200);
     update(getGraphics());
   }
 }
