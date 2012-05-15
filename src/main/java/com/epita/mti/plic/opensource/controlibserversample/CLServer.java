@@ -8,7 +8,7 @@ package com.epita.mti.plic.opensource.controlibserversample;
  *
  * @author benoit
  */
-public interface CLServeur {
+public interface CLServer {
 
   public void updatePlugins();
 }

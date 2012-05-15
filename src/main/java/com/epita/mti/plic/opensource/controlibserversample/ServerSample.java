@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  *
  * @author Julien "Roulyo" Fraisse
  */
-public class ServerSample implements CLServeur
+public class ServerSample implements CLServer
 {
 
   public final static int PORT = 4200;
@@ -44,12 +44,13 @@ public class ServerSample implements CLServeur
 
       while (true)
       {
-        Socket ss = connectionManager.getServer().accept();
-        closeQrcodeView();
         ArrayList<Observer> observers = new ArrayList<Observer>();
         MouseObserver mouseObserver = new MouseObserver();
         TrackpadObserver trackpasObserver = new TrackpadObserver();
         JarFileObserver jarFileObserver = new JarFileObserver();
+        Socket ss = connectionManager.getServer().accept();
+
+        closeQrcodeView();
         jarFileObserver.setClassLoader(classLoader);
         observers.add(trackpasObserver);
         observers.add(mouseObserver);
@@ -85,25 +86,39 @@ public class ServerSample implements CLServeur
   }
 
   @Override
-  public void updatePlugins() {
+  public void updatePlugins()
+  {
     ArrayList<Class<?>> plugins = classLoader.getPlugins();
     for (Class<?> plugin : plugins)
     {
-      try {
+      try
+      {
         Constructor<?> constructor = plugin.getConstructor();
         Observer observer = (Observer) constructor.newInstance();
         receiver.addObserver(observer);
-      } catch (InstantiationException ex) {
+      }
+      catch (InstantiationException ex)
+      {
         Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
-      } catch (IllegalAccessException ex) {
+      }
+      catch (IllegalAccessException ex)
+      {
         Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
-      } catch (IllegalArgumentException ex) {
+      }
+      catch (IllegalArgumentException ex)
+      {
         Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
-      } catch (InvocationTargetException ex) {
+      }
+      catch (InvocationTargetException ex)
+      {
         Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
-      } catch (NoSuchMethodException ex) {
+      }
+      catch (NoSuchMethodException ex)
+      {
         Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
-      } catch (SecurityException ex) {
+      }
+      catch (SecurityException ex)
+      {
         Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
       }
     }
