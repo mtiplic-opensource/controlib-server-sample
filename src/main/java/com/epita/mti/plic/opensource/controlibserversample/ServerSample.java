@@ -44,6 +44,11 @@ public class ServerSample implements CLServer
 
       while (true)
       {
+        try {
+          classLoader.initializeLoader();
+        } catch (Exception ex) {
+          Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
+        }
         ArrayList<Observer> observers = new ArrayList<Observer>();
         MouseObserver mouseObserver = new MouseObserver();
         TrackpadObserver trackpasObserver = new TrackpadObserver();

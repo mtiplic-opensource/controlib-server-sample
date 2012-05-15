@@ -37,12 +37,17 @@ public class JarFileObserver implements Observer
       {
         FileOutputStream fos = new FileOutputStream(fileName);
         BufferedOutputStream bos = new BufferedOutputStream(fos);
-        
+
         bos.write(Base64.decode(fileContent));
         bos.flush();
         bos.close();
         fos.flush();
         fos.close();
+        try {
+          classLoader.addPlugins(fileName);
+        } catch (Exception ex) {
+          Logger.getLogger(JarFileObserver.class.getName()).log(Level.SEVERE, null, ex);
+        }
       }
       catch (IOException ex)
       {
