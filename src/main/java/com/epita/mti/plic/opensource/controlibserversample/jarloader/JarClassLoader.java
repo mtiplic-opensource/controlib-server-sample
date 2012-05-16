@@ -1,6 +1,5 @@
 package com.epita.mti.plic.opensource.controlibserversample.jarloader;
 
-import com.epita.mti.plic.opensource.controlibserversample.CLServer;
 import com.epita.mti.plic.opensource.controlibserversample.ServerSample;
 import java.io.File;
 import java.net.URL;
@@ -82,7 +81,7 @@ public class JarClassLoader
   {
     return plugins;
   }
-  
+
   public JarFinder getFinder()
   {
     return finder;
