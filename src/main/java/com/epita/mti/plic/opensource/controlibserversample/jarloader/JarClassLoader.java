@@ -1,6 +1,6 @@
 package com.epita.mti.plic.opensource.controlibserversample.jarloader;
 
-import com.epita.mti.plic.opensource.controlibserversample.CLServer;
+import com.epita.mti.plic.opensource.controlibserversample.ServerSample;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -13,7 +13,6 @@ public class JarClassLoader
 
   private JarFinder finder;
   private ArrayList<Class<?>> plugins;
-  private CLServer delegate;
 
   public JarClassLoader()
   {
@@ -47,7 +46,7 @@ public class JarClassLoader
           plugins.add(Class.forName(tmp, true, loader));
         }
       }
-      delegate.updatePlugins();
+      ServerSample.updatePlugins();
     }
   }
 
@@ -71,22 +70,12 @@ public class JarClassLoader
         plugins.add(Class.forName(tmp, true, loader));
       }
     }
-    delegate.updatePlugins();
+    ServerSample.updatePlugins();
   }
 
   public ArrayList<Class<?>> getPlugins()
   {
     return plugins;
-  }
-
-  public CLServer getDelegate()
-  {
-    return delegate;
-  }
-
-  public void setDelegate(CLServer delegate)
-  {
-    this.delegate = delegate;
   }
 
   public JarFinder getFinder()
