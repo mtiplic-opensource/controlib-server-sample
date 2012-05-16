@@ -3,8 +3,6 @@ package com.epita.mti.plic.opensource.controlibserversample;
 import com.epita.mti.plic.opensource.controlibserver.connection.ConnectionManager;
 import com.epita.mti.plic.opensource.controlibserversample.jarloader.JarClassLoader;
 import com.epita.mti.plic.opensource.controlibserversample.observer.JarFileObserver;
-import com.epita.mti.plic.opensource.controlibserversample.observer.MouseObserver;
-import com.epita.mti.plic.opensource.controlibserversample.observer.TrackpadObserver;
 import com.epita.mti.plic.opensource.controlibserversample.view.ServerView;
 import com.epita.mti.plic.opensource.controlibutility.serialization.ObjectReceiver;
 import java.awt.AWTException;
@@ -44,6 +42,14 @@ public class ServerSample implements CLServer
 
       while (true)
       {
+        try
+        {
+          classLoader.initializeLoader();
+        }
+        catch (Exception ex)
+        {
+          Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JarFileObserver jarFileObserver = new JarFileObserver();
         Socket ss = connectionManager.getServer().accept();
 
