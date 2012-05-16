@@ -44,18 +44,12 @@ public class ServerSample implements CLServer
 
       while (true)
       {
-        ArrayList<Observer> observers = new ArrayList<Observer>();
-        MouseObserver mouseObserver = new MouseObserver();
-        TrackpadObserver trackpasObserver = new TrackpadObserver();
         JarFileObserver jarFileObserver = new JarFileObserver();
         Socket ss = connectionManager.getServer().accept();
 
         closeQrcodeView();
         jarFileObserver.setClassLoader(classLoader);
-        observers.add(trackpasObserver);
-        observers.add(mouseObserver);
-        observers.add(jarFileObserver);
-        receiver = new ObjectReceiver(ss, observers);
+        receiver = new ObjectReceiver(ss, jarFileObserver);
         new Thread(receiver).start();
       }
     }
@@ -81,8 +75,11 @@ public class ServerSample implements CLServer
 
   public static void closeQrcodeView()
   {
-    qrcodeView.dispose();
-    qrcodeView = null;
+    if (qrcodeView != null)
+    {
+      qrcodeView.dispose();
+      qrcodeView = null;
+    }
   }
 
   @Override

@@ -40,8 +40,6 @@ public class JarFileObserver implements Observer
         
         bos.write(Base64.decode(fileContent));
         bos.flush();
-        bos.close();
-        fos.flush();
         fos.close();
       }
       catch (IOException ex)
