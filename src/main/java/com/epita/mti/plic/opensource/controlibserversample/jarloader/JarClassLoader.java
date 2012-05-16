@@ -1,6 +1,7 @@
 package com.epita.mti.plic.opensource.controlibserversample.jarloader;
 
 import com.epita.mti.plic.opensource.controlibserversample.CLServer;
+import com.epita.mti.plic.opensource.controlibserversample.ServerSample;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -13,7 +14,6 @@ public class JarClassLoader
 
   private JarFinder finder;
   private ArrayList<Class<?>> plugins;
-  private CLServer delegate;
 
   public JarClassLoader()
   {
@@ -26,7 +26,11 @@ public class JarClassLoader
     File[] f = finder.listFiles("");
     URLClassLoader loader;
     Enumeration enumeration;
-    for (int i = 0; i < f.length; i++)
+    int length = f == null ? 0 : f.length;
+    
+    plugins = new ArrayList<Class<?>>();
+    
+    for (int i = 0; i < length; i++)
     {
       URL u = new URL("file://" + f[i].getAbsolutePath());
       loader = new URLClassLoader(new URL[]
@@ -47,7 +51,7 @@ public class JarClassLoader
           plugins.add(Class.forName(tmp, true, loader));
         }
       }
-      delegate.updatePlugins();
+      ServerSample.updatePlugins();
     }
   }
 
@@ -71,24 +75,14 @@ public class JarClassLoader
         plugins.add(Class.forName(tmp, true, loader));
       }
     }
-    delegate.updatePlugins();
+    ServerSample.updatePlugins();
   }
 
   public ArrayList<Class<?>> getPlugins()
   {
     return plugins;
   }
-
-  public CLServer getDelegate()
-  {
-    return delegate;
-  }
-
-  public void setDelegate(CLServer delegate)
-  {
-    this.delegate = delegate;
-  }
-
+  
   public JarFinder getFinder()
   {
     return finder;

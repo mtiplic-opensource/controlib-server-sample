@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author Julien "Roulyo" Fraisse
  */
-public class ServerSample implements CLServer
+public class ServerSample
 {
 
   public final static int PORT = 4200;
@@ -88,8 +88,7 @@ public class ServerSample implements CLServer
     }
   }
 
-  @Override
-  public void updatePlugins()
+  public static void updatePlugins()
   {
     ArrayList<Class<?>> plugins = classLoader.getPlugins();
     for (Class<?> plugin : plugins)
