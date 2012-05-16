@@ -7,7 +7,6 @@ package com.epita.mti.plic.opensource.controlibserversample.observer;
 import com.epita.mti.plic.opensource.controlibserversample.jarloader.JarClassLoader;
 import com.epita.mti.plic.opensource.controlibutility.beans.CLJarFile;
 import com.epita.mti.plic.opensource.controlibutility.serialization.CLSerializable;
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,6 +14,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.iharder.Base64;
 
 /**
  *
