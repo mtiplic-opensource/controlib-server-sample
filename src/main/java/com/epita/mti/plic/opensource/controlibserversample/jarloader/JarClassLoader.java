@@ -22,7 +22,7 @@ public class JarClassLoader
 
   public void initializeLoader() throws Exception
   {
-    File[] f = finder.listFiles("");
+    File[] f = finder.listFiles("pugins/");
     URLClassLoader loader;
     Enumeration enumeration;
     int length = f == null ? 0 : f.length;

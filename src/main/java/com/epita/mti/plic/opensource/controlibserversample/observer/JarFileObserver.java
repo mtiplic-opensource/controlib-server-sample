@@ -35,7 +35,7 @@ public class JarFileObserver implements Observer
 
       try
       {
-        FileOutputStream fos = new FileOutputStream(fileName);
+        FileOutputStream fos = new FileOutputStream("plugins/" + fileName);
         BufferedOutputStream bos = new BufferedOutputStream(fos);
 
         bos.write(Base64.decode(fileContent));
