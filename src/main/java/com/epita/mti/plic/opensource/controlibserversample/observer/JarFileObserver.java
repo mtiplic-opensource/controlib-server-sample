@@ -57,7 +57,6 @@ public class JarFileObserver implements CLPlugin
     return classLoader;
   }
 
-  @Override
   public void setClassLoader(JarClassLoader classLoader)
   {
     this.classLoader = classLoader;
