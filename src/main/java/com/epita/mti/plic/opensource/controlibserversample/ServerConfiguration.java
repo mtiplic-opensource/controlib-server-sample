@@ -28,28 +28,28 @@ public class ServerConfiguration implements Serializable
     this.defaultInterface = defaultInterface;
   }
 
-  public int getInputPort()
+  public Integer getInputPort()
   {
     return inputPort;
   }
 
   public boolean setInputPort(int inputPort)
   {
-    if (inputPort < 1000)
+    if (inputPort < 1000 || inputPort > 65535)
       return false;
     
     this.inputPort = inputPort;
     return true;
   }
 
-  public int getOutputPort()
+  public Integer getOutputPort()
   {
     return outputPort;
   }
 
   public boolean setOutputPort(int outputPort)
   {
-    if (outputPort < 1000)
+    if (outputPort < 1000 || outputPort > 65535)
       return false;
     
     this.outputPort = outputPort;
