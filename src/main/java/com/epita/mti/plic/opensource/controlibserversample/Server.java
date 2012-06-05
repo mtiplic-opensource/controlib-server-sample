@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 /**
  *
  * @author Julien "Roulyo" Fraisse
+ * This the server used for the demonstration.
  */
 public class Server implements CLServer
 {
@@ -35,6 +36,9 @@ public class Server implements CLServer
   private static ObjectSender sender;
 
   @Override
+  /**
+   * This method update the plugins available for the server
+   */
   public void updatePlugins() {
     ArrayList<Class<?>> plugins = classLoader.getPlugins();
     for (Class<?> plugin : plugins)
@@ -73,6 +77,9 @@ public class Server implements CLServer
     classLoader.getPlugins().clear();
   }
 
+  /**
+   * This methods launches the server, shows the Qr code and opens the socket.
+   */
   public void start()
   {
     try
