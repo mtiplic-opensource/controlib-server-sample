@@ -22,7 +22,7 @@ public class JarClassLoader
 
   public void initializeLoader() throws Exception
   {
-    File[] f = finder.listFiles("pugins/");
+    File[] f = finder.listFiles("plugins/");
     URLClassLoader loader;
     Enumeration enumeration;
     int length = f == null ? 0 : f.length;
@@ -36,6 +36,7 @@ public class JarClassLoader
               {
                 u
               });
+      System.out.println(f[i].getAbsolutePath());
       JarFile jar = new JarFile(f[i].getAbsolutePath());
       enumeration = jar.entries();
 
@@ -56,12 +57,13 @@ public class JarClassLoader
 
   public void addPlugins(String jarFile) throws Exception
   {
-    File file = new File(jarFile);
+    File file = new File("plugins/" + jarFile);
     URL u = new URL("file://" + file.getAbsolutePath());
     URLClassLoader loader = new URLClassLoader(new URL[]
             {
               u
             });
+    System.out.println(file.getAbsolutePath());
     JarFile jar = new JarFile(file.getAbsolutePath());
     Enumeration enumeration = jar.entries();
     while (enumeration.hasMoreElements())

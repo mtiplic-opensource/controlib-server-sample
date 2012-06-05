@@ -54,12 +54,16 @@ public class ServerSample
           Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
         }
         JarFileObserver jarFileObserver = new JarFileObserver();
+        System.out.println("WAITING CONNECTION");
         Socket inputSocket = connectionManager.getInputSocket().accept();
-        Socket outputSocket = connectionManager.getOutputSocket().accept();
+        //Socket outputSocket = connectionManager.getOutputSocket().accept();
+        System.out.println("CONNECTED");
+        
         closeQrcodeView();
+        
         jarFileObserver.setClassLoader(classLoader);
         receiver = new ObjectReceiver(inputSocket, jarFileObserver);
-        sender = new ObjectSender(outputSocket.getOutputStream());
+        //sender = new ObjectSender(outputSocket.getOutputStream());
         new Thread(receiver).start();
       }
     }
