@@ -22,10 +22,14 @@ public class JarClassLoader
 
   public void initializeLoader() throws Exception
   {
-    File[] f = finder.listFiles("");
+    File[] f = finder.listFiles("pugins/");
     URLClassLoader loader;
     Enumeration enumeration;
-    for (int i = 0; i < f.length; i++)
+    int length = f == null ? 0 : f.length;
+    
+    plugins = new ArrayList<Class<?>>();
+    
+    for (int i = 0; i < length; i++)
     {
       URL u = new URL("file://" + f[i].getAbsolutePath());
       loader = new URLClassLoader(new URL[]

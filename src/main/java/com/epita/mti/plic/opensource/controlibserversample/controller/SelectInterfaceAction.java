@@ -6,9 +6,11 @@ package com.epita.mti.plic.opensource.controlibserversample.controller;
 
 import com.epita.mti.plic.opensource.controlibserversample.view.QRCodeView;
 import com.google.zxing.WriterException;
-import java.awt.Choice;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,13 +18,14 @@ import java.awt.event.ItemListener;
  */
 public class SelectInterfaceAction implements ItemListener
 {
+
   private QRCodeView view;
-  
+
   public SelectInterfaceAction(QRCodeView view)
   {
     this.view = view;
   }
-  
+
   @Override
   public void itemStateChanged(ItemEvent e)
   {
@@ -34,6 +37,9 @@ public class SelectInterfaceAction implements ItemListener
     {
       ex.printStackTrace();
     }
+    catch (SocketException ex)
+    {
+      Logger.getLogger(SelectInterfaceAction.class.getName()).log(Level.SEVERE, null, ex);
+    }
   }
-  
 }
