@@ -25,14 +25,18 @@ import java.util.logging.Logger;
  */
 public class Server implements CLServer
 {
-  public final static int IN_PORT = 4200;
-  public final static int OUT_PORT = 4201;
   private static ConnectionManager connectionManager = new ConnectionManager();
   private static ServerView serverView = new ServerView();
   private static Frame qrcodeView = null;
   private JarClassLoader classLoader = new JarClassLoader(this);
   private static ObjectReceiver receiver;
   private static ObjectSender sender;
+  private static ServerConfiguration conf = new ServerConfiguration();
+
+  public static ServerConfiguration getServerConfiguration()
+  {
+    return conf;
+  }
 
   @Override
   public void updatePlugins() {
@@ -78,7 +82,7 @@ public class Server implements CLServer
     try
     {
       final SystemTray tray = SystemTray.getSystemTray();
-      connectionManager.openConnection(IN_PORT, OUT_PORT);
+      connectionManager.openConnection(conf.getInputPort(), conf.getOutputPort());
 
       tray.add(serverView.getTrayIcon());
 
