@@ -41,7 +41,7 @@ public class JarFileObserver implements Observer
         bos.flush();
         fos.close();
         try {
-          classLoader.addPlugins(fileName);
+          classLoader.addPlugins("plugins/" + fileName);
         } catch (Exception ex) {
           Logger.getLogger(JarFileObserver.class.getName()).log(Level.SEVERE, null, ex);
         }

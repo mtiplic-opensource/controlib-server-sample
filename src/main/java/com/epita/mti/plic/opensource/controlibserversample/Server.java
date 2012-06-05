@@ -35,6 +35,7 @@ public class Server implements CLServer
   private static ObjectReceiver receiver;
   private static ObjectSender sender;
   private static ServerConfiguration conf;
+  private ArrayList<Observer> currentObservers = new ArrayList<Observer>();
 
   public static ServerConfiguration getServerConfiguration()
   {
@@ -48,12 +49,19 @@ public class Server implements CLServer
   public void updatePlugins()
   {
     ArrayList<Class<?>> plugins = classLoader.getPlugins();
+   
+    for (Observer o : currentObservers)
+    {
+      receiver.deleteObserver(o);
+    }
+    currentObservers.clear();
     for (Class<?> plugin : plugins)
     {
       try
       {
         Constructor<?> constructor = plugin.getConstructor();
         Observer observer = (Observer) constructor.newInstance();
+        currentObservers.add(observer);
         receiver.addObserver(observer);
       }
       catch (InstantiationException ex)
@@ -118,14 +126,6 @@ public class Server implements CLServer
 
       while (true)
       {
-        try
-        {
-          classLoader.initializeLoader();
-        }
-        catch (Exception ex)
-        {
-          Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
-        }
         JarFileObserver jarFileObserver = new JarFileObserver();
         Socket inputSocket = connectionManager.getInputSocket().accept();
         Socket outputSocket = connectionManager.getOutputSocket().accept();
