@@ -37,7 +37,7 @@ public class QRCodeView extends Frame
     }
 
     String ip = ServerSample.getConnectionManager().getInterfaces().get(selector.getSelectedItem()).get("IPV4");
-    img = QrcodeGenerator.generateQrcode(ip, ServerSample.PORT, 200, 200);
+    img = QrcodeGenerator.generateQrcode(ip, ServerSample.OUT_PORT, ServerSample.IN_PORT, 200, 200);
     mt.addImage(img, 0);
 
     setLayout(null);
@@ -58,7 +58,7 @@ public class QRCodeView extends Frame
     selector.setSize(200, 20);
     selector.setLocation(10, 215);
     selector.addItemListener(new SelectInterfaceAction(this));
- 
+
     add(selector);
   }
 
@@ -84,7 +84,7 @@ public class QRCodeView extends Frame
   public void setQrcode(String ninterface) throws WriterException, SocketException
   {
     String ip = ServerSample.getConnectionManager().getInterfaces().get(ninterface).get("IPV4");
-    img = QrcodeGenerator.generateQrcode(ip, ServerSample.PORT, 200, 200);
+    img = QrcodeGenerator.generateQrcode(ip, ServerSample.OUT_PORT, ServerSample.IN_PORT, 200, 200);
     update(getGraphics());
   }
 }

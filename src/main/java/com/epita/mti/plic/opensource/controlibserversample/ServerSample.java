@@ -5,6 +5,7 @@ import com.epita.mti.plic.opensource.controlibserversample.jarloader.JarClassLoa
 import com.epita.mti.plic.opensource.controlibserversample.observer.JarFileObserver;
 import com.epita.mti.plic.opensource.controlibserversample.view.ServerView;
 import com.epita.mti.plic.opensource.controlibutility.serialization.ObjectReceiver;
+import com.epita.mti.plic.opensource.controlibutility.serialization.ObjectSender;
 import java.awt.AWTException;
 import java.awt.Frame;
 import java.awt.SystemTray;
@@ -24,19 +25,21 @@ import java.util.logging.Logger;
 public class ServerSample
 {
 
-  public final static int PORT = 4200;
+  public final static int IN_PORT = 4200;
+  public final static int OUT_PORT = 4201;
   private static ConnectionManager connectionManager = new ConnectionManager();
   private static ServerView serverView = new ServerView();
   private static Frame qrcodeView = null;
   private static JarClassLoader classLoader = new JarClassLoader();
   private static ObjectReceiver receiver;
+  private static ObjectSender sender;
 
   public static void main(String[] args)
   {
     try
     {
       final SystemTray tray = SystemTray.getSystemTray();
-      connectionManager.openConnection(PORT);
+      connectionManager.openConnection(IN_PORT, OUT_PORT);
 
       tray.add(serverView.getTrayIcon());
 
@@ -51,11 +54,12 @@ public class ServerSample
           Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
         }
         JarFileObserver jarFileObserver = new JarFileObserver();
-        Socket ss = connectionManager.getServer().accept();
-
+        Socket inputSocket = connectionManager.getInputSocket().accept();
+        Socket outputSocket = connectionManager.getOutputSocket().accept();
         closeQrcodeView();
         jarFileObserver.setClassLoader(classLoader);
-        receiver = new ObjectReceiver(ss, jarFileObserver);
+        receiver = new ObjectReceiver(inputSocket, jarFileObserver);
+        sender = new ObjectSender(outputSocket.getOutputStream());
         new Thread(receiver).start();
       }
     }
