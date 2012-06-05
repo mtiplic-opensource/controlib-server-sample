@@ -10,7 +10,9 @@ import com.epita.mti.plic.opensource.controlibutility.serialization.ObjectSender
 import java.awt.AWTException;
 import java.awt.Frame;
 import java.awt.SystemTray;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
@@ -25,13 +27,14 @@ import java.util.logging.Logger;
  */
 public class Server implements CLServer
 {
+
   private static ConnectionManager connectionManager = new ConnectionManager();
   private static ServerView serverView = new ServerView();
   private static Frame qrcodeView = null;
   private JarClassLoader classLoader = new JarClassLoader(this);
   private static ObjectReceiver receiver;
   private static ObjectSender sender;
-  private static ServerConfiguration conf = new ServerConfiguration();
+  private static ServerConfiguration conf;
 
   public static ServerConfiguration getServerConfiguration()
   {
@@ -39,7 +42,8 @@ public class Server implements CLServer
   }
 
   @Override
-  public void updatePlugins() {
+  public void updatePlugins()
+  {
     ArrayList<Class<?>> plugins = classLoader.getPlugins();
     for (Class<?> plugin : plugins)
     {
@@ -77,11 +81,31 @@ public class Server implements CLServer
     classLoader.getPlugins().clear();
   }
 
+  public void loadConf()
+  {
+    try
+    {
+      FileInputStream file = new FileInputStream("server.conf");
+      ObjectInputStream ois = new ObjectInputStream(file);
+      
+      conf = (ServerConfiguration) ois.readObject();
+    }
+    catch (java.io.IOException e)
+    {
+      conf = new ServerConfiguration();
+    }
+    catch (ClassNotFoundException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
   public void start()
   {
     try
     {
       final SystemTray tray = SystemTray.getSystemTray();
+      loadConf();
       connectionManager.openConnection(conf.getInputPort(), conf.getOutputPort());
 
       tray.add(serverView.getTrayIcon());

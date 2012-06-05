@@ -16,7 +16,7 @@ public class ServerConfiguration implements Serializable
   
   private int inputPort = 4200;
   private int outputPort = 4201;
-  private String defaultInterface;
+  private String defaultInterface = "wlan0";
 
   public String getDefaultInterface()
   {

@@ -59,7 +59,8 @@ public class QRCodeView extends Frame
     selector.setSize(200, 20);
     selector.setLocation(10, 215);
     selector.addItemListener(new SelectInterfaceAction(this));
-
+    selector.select(Server.getServerConfiguration().getDefaultInterface());
+    
     add(selector);
   }
 
