@@ -3,6 +3,7 @@ package com.epita.mti.plic.opensource.controlibserversample;
 /**
  *
  * @author Julien "Roulyo" Fraisse
+ * This the entry point of the sample
  */
 public class ServerSample
 {

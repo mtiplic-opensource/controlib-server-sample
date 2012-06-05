@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.epita.mti.plic.opensource.controlibserversample.observer;
 
 import com.epita.mti.plic.opensource.controlibserver.jarloader.JarClassLoader;
@@ -19,6 +15,9 @@ import net.iharder.Base64;
 /**
  *
  * @author Benoit "KIDdAe" Vasseur
+ * This a the observer used to handle plugins reception.
+ * The jar content is taken from the stream and put in a jar file in a local
+ * directory.
  */
 public class JarFileObserver implements Observer
 {

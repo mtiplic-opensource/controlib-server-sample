@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Julien "Roulyo" Fraisse
+ * @author Julien "Roulyo" Fraisse This the server used for the demonstration.
  */
 public class Server implements CLServer
 {
@@ -41,6 +41,9 @@ public class Server implements CLServer
     return conf;
   }
 
+  /**
+   * This method update the plugins available for the server
+   */
   @Override
   public void updatePlugins()
   {
@@ -87,7 +90,7 @@ public class Server implements CLServer
     {
       FileInputStream file = new FileInputStream("server.conf");
       ObjectInputStream ois = new ObjectInputStream(file);
-      
+
       conf = (ServerConfiguration) ois.readObject();
     }
     catch (java.io.IOException e)
@@ -100,6 +103,9 @@ public class Server implements CLServer
     }
   }
 
+  /**
+   * This methods launches the server, shows the Qr code and opens the socket.
+   */
   public void start()
   {
     try
