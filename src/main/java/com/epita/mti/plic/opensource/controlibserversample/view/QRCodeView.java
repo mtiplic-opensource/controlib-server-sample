@@ -2,7 +2,6 @@ package com.epita.mti.plic.opensource.controlibserversample.view;
 
 import com.epita.mti.plic.opensource.controlibserver.qrcode.QrcodeGenerator;
 import com.epita.mti.plic.opensource.controlibserversample.Server;
-import com.epita.mti.plic.opensource.controlibserversample.ServerSample;
 import com.epita.mti.plic.opensource.controlibserversample.controller.SelectInterfaceAction;
 import com.google.zxing.WriterException;
 import java.awt.*;
@@ -38,7 +37,8 @@ public class QRCodeView extends Frame
     }
 
     String ip = Server.getConnectionManager().getInterfaces().get(selector.getSelectedItem()).get("IPV4");
-    img = QrcodeGenerator.generateQrcode(ip, Server.OUT_PORT, Server.IN_PORT, 200, 200);
+    img = QrcodeGenerator.generateQrcode(ip, Server.getServerConfiguration().getOutputPort(),
+                                             Server.getServerConfiguration().getInputPort(), 200, 200);
     mt.addImage(img, 0);
 
     setLayout(null);
@@ -59,7 +59,8 @@ public class QRCodeView extends Frame
     selector.setSize(200, 20);
     selector.setLocation(10, 215);
     selector.addItemListener(new SelectInterfaceAction(this));
-
+    selector.select(Server.getServerConfiguration().getDefaultInterface());
+    
     add(selector);
   }
 
@@ -85,7 +86,8 @@ public class QRCodeView extends Frame
   public void setQrcode(String ninterface) throws WriterException, SocketException
   {
     String ip = Server.getConnectionManager().getInterfaces().get(ninterface).get("IPV4");
-    img = QrcodeGenerator.generateQrcode(ip, Server.OUT_PORT, Server.IN_PORT, 200, 200);
+    img = QrcodeGenerator.generateQrcode(ip, Server.getServerConfiguration().getOutputPort(),
+                                             Server.getServerConfiguration().getInputPort(), 200, 200);
     update(getGraphics());
   }
 }

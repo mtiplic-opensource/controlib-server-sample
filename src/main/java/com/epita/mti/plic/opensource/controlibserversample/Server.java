@@ -10,7 +10,9 @@ import com.epita.mti.plic.opensource.controlibutility.serialization.ObjectSender
 import java.awt.AWTException;
 import java.awt.Frame;
 import java.awt.SystemTray;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
@@ -21,32 +23,45 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Julien "Roulyo" Fraisse
- * This the server used for the demonstration.
+ * @author Julien "Roulyo" Fraisse This the server used for the demonstration.
  */
 public class Server implements CLServer
 {
-  public final static int IN_PORT = 4200;
-  public final static int OUT_PORT = 4201;
+
   private static ConnectionManager connectionManager = new ConnectionManager();
   private static ServerView serverView = new ServerView();
   private static Frame qrcodeView = null;
   private JarClassLoader classLoader = new JarClassLoader(this);
   private static ObjectReceiver receiver;
   private static ObjectSender sender;
+  private static ServerConfiguration conf;
+  private ArrayList<Observer> currentObservers = new ArrayList<Observer>();
 
-  @Override
+  public static ServerConfiguration getServerConfiguration()
+  {
+    return conf;
+  }
+
   /**
    * This method update the plugins available for the server
    */
-  public void updatePlugins() {
+  @Override
+  public void updatePlugins()
+  {
     ArrayList<Class<?>> plugins = classLoader.getPlugins();
+   
+    for (Observer o : currentObservers)
+    {
+      receiver.deleteObserver(o);
+    }
+    currentObservers.clear();
     for (Class<?> plugin : plugins)
     {
       try
       {
         Constructor<?> constructor = plugin.getConstructor();
         Observer observer = (Observer) constructor.newInstance();
+        currentObservers.add(observer);
         receiver.addObserver(observer);
       }
       catch (InstantiationException ex)
@@ -77,6 +92,25 @@ public class Server implements CLServer
     classLoader.getPlugins().clear();
   }
 
+  public void loadConf()
+  {
+    try
+    {
+      FileInputStream file = new FileInputStream("server.conf");
+      ObjectInputStream ois = new ObjectInputStream(file);
+
+      conf = (ServerConfiguration) ois.readObject();
+    }
+    catch (java.io.IOException e)
+    {
+      conf = new ServerConfiguration();
+    }
+    catch (ClassNotFoundException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
   /**
    * This methods launches the server, shows the Qr code and opens the socket.
    */
@@ -85,20 +119,13 @@ public class Server implements CLServer
     try
     {
       final SystemTray tray = SystemTray.getSystemTray();
-      connectionManager.openConnection(IN_PORT, OUT_PORT);
+      loadConf();
+      connectionManager.openConnection(conf.getInputPort(), conf.getOutputPort());
 
       tray.add(serverView.getTrayIcon());
 
       while (true)
       {
-        try
-        {
-          classLoader.initializeLoader();
-        }
-        catch (Exception ex)
-        {
-          Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
-        }
         JarFileObserver jarFileObserver = new JarFileObserver();
         Socket inputSocket = connectionManager.getInputSocket().accept();
         Socket outputSocket = connectionManager.getOutputSocket().accept();

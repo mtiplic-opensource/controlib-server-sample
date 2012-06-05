@@ -4,6 +4,7 @@
  */
 package com.epita.mti.plic.opensource.controlibserversample.controller;
 
+import com.epita.mti.plic.opensource.controlibserversample.Server;
 import com.epita.mti.plic.opensource.controlibserversample.view.QRCodeView;
 import com.google.zxing.WriterException;
 import java.awt.event.ItemEvent;
@@ -31,6 +32,7 @@ public class SelectInterfaceAction implements ItemListener
   {
     try
     {
+      Server.getServerConfiguration().setDefaultInterface((String) e.getItem());
       view.setQrcode((String) e.getItem());
     }
     catch (WriterException ex)
