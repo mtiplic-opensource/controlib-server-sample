@@ -1,6 +1,5 @@
 package com.epita.mti.plic.opensource.controlibserversample.controller;
 
-import com.epita.mti.plic.opensource.controlibserversample.ServerSample;
 import com.epita.mti.plic.opensource.controlibserversample.view.QRCodeView;
 import com.google.zxing.WriterException;
 import java.awt.event.ActionEvent;

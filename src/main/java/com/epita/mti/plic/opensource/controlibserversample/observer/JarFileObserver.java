@@ -4,7 +4,7 @@
  */
 package com.epita.mti.plic.opensource.controlibserversample.observer;
 
-import com.epita.mti.plic.opensource.controlibserversample.jarloader.JarClassLoader;
+import com.epita.mti.plic.opensource.controlibserver.jarloader.JarClassLoader;
 import com.epita.mti.plic.opensource.controlibutility.beans.CLJarFile;
 import com.epita.mti.plic.opensource.controlibutility.serialization.CLSerializable;
 import java.io.BufferedOutputStream;
