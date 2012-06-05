@@ -1,5 +1,6 @@
 package com.epita.mti.plic.opensource.controlibserversample.controller;
 
+import com.epita.mti.plic.opensource.controlibserversample.Server;
 import com.epita.mti.plic.opensource.controlibserversample.view.QRCodeView;
 import com.google.zxing.WriterException;
 import java.awt.event.ActionEvent;
@@ -23,15 +24,15 @@ public class QRCodeItemAction implements ActionListener
   {
     try
     {
-      ServerSample.setQrcodeView(new QRCodeView());
+      Server.setQrcodeView(new QRCodeView());
     }
     catch (WriterException ex)
     {
-      Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
     }
     catch (SocketException ex)
     {
-      Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
 }
