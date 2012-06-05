@@ -1,5 +1,6 @@
 package com.epita.mti.plic.opensource.controlibserversample.controller;
 
+import com.epita.mti.plic.opensource.controlibserversample.Server;
 import com.epita.mti.plic.opensource.controlibserversample.ServerSample;
 import com.epita.mti.plic.opensource.controlibserversample.view.QRCodeView;
 import com.google.zxing.WriterException;
@@ -24,7 +25,7 @@ public class QRCodeItemAction implements ActionListener
   {
     try
     {
-      ServerSample.setQrcodeView(new QRCodeView());
+      Server.setQrcodeView(new QRCodeView());
     }
     catch (WriterException ex)
     {

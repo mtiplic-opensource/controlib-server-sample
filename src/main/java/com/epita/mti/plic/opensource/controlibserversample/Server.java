@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Benoit "KIDdAe" Vasseur
+ * @author Julien "Roulyo" Fraisse
  */
 public class Server implements CLServer
 {
@@ -47,27 +47,27 @@ public class Server implements CLServer
       }
       catch (InstantiationException ex)
       {
-        Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
       }
       catch (IllegalAccessException ex)
       {
-        Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
       }
       catch (IllegalArgumentException ex)
       {
-        Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
       }
       catch (InvocationTargetException ex)
       {
-        Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
       }
       catch (NoSuchMethodException ex)
       {
-        Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
       }
       catch (SecurityException ex)
       {
-        Logger.getLogger(ServerSample.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
       }
     }
     classLoader.getPlugins().clear();
