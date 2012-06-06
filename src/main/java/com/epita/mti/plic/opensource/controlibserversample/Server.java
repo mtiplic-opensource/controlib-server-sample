@@ -10,9 +10,7 @@ import com.epita.mti.plic.opensource.controlibutility.serialization.ObjectSender
 import java.awt.AWTException;
 import java.awt.Frame;
 import java.awt.SystemTray;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
@@ -49,7 +47,7 @@ public class Server implements CLServer
   public void updatePlugins()
   {
     ArrayList<Class<?>> plugins = classLoader.getPlugins();
-   
+
     for (Observer o : currentObservers)
     {
       receiver.deleteObserver(o);
@@ -119,21 +117,34 @@ public class Server implements CLServer
     try
     {
       final SystemTray tray = SystemTray.getSystemTray();
+      JarFileObserver jarFileObserver = new JarFileObserver();
+
       loadConf();
       connectionManager.openConnection(conf.getMainPort());
+      jarFileObserver.setClassLoader(classLoader);
 
       tray.add(serverView.getTrayIcon());
 
+      Socket mainSocket = connectionManager.getMainSocket().accept();
+      closeQrcodeView();
+
+      InputStreamReader isr = new InputStreamReader(mainSocket.getInputStream());
+      BufferedReader br = new BufferedReader(isr);
+
       while (true)
       {
-        JarFileObserver jarFileObserver = new JarFileObserver();
-        Socket inputSocket = connectionManager.getInputSocket().accept();
-        Socket outputSocket = connectionManager.getOutputSocket().accept();
-        closeQrcodeView();
-        jarFileObserver.setClassLoader(classLoader);
-        receiver = new ObjectReceiver(inputSocket, jarFileObserver);
-        sender = new ObjectSender(outputSocket.getOutputStream());
-        new Thread(receiver).start();
+        String message = br.readLine();
+        if (message.equals("Pomme"))
+        {
+          OutputStreamWriter osw = new OutputStreamWriter(mainSocket.getOutputStream());
+          osw.write("Cerise");
+          Socket inputSocket = connectionManager.getInputSocket().accept();
+          Socket outputSocket = connectionManager.getOutputSocket().accept();
+
+          receiver = new ObjectReceiver(inputSocket, jarFileObserver);
+          sender = new ObjectSender(outputSocket.getOutputStream());
+          new Thread(receiver).start();
+        }
       }
     }
     catch (IOException ex)
