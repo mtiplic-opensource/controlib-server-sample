@@ -18,6 +18,7 @@ import java.awt.event.WindowEvent;
 public class ConfigurationView extends Frame
 {
 
+  private TextField mainField = new TextField(Server.getServerConfiguration().getMainPort().toString());
   private TextField csField = new TextField(Server.getServerConfiguration().getOutputPort().toString());
   private TextField scField = new TextField(Server.getServerConfiguration().getInputPort().toString());
   private Button cancelButton = new Button("Cancel");
@@ -30,6 +31,8 @@ public class ConfigurationView extends Frame
 
     Dimension dim = getToolkit().getScreenSize();
 
+    add(new Label("Main communication port:"));
+    add(mainField);
     add(new Label("Server to Client port:"));
     add(csField);
     add(new Label("Client to Server port:"));

@@ -61,7 +61,7 @@ public class ServerConfiguration implements Serializable
     return true;
   }
 
-  public int getMainPort()
+  public Integer getMainPort()
   {
     return mainPort;
   }
