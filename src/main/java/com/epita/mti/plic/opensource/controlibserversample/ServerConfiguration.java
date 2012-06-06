@@ -12,8 +12,9 @@ import java.io.Serializable;
  */
 public class ServerConfiguration implements Serializable
 {
+
   private static final long serialVersionUID = 42L;
-  
+  private int mainPort = 4199;
   private int inputPort = 4200;
   private int outputPort = 4201;
   private String defaultInterface = "wlan0";
@@ -36,8 +37,10 @@ public class ServerConfiguration implements Serializable
   public boolean setInputPort(int inputPort)
   {
     if (inputPort < 1000 || inputPort > 65535)
+    {
       return false;
-    
+    }
+
     this.inputPort = inputPort;
     return true;
   }
@@ -50,10 +53,27 @@ public class ServerConfiguration implements Serializable
   public boolean setOutputPort(int outputPort)
   {
     if (outputPort < 1000 || outputPort > 65535)
+    {
       return false;
-    
+    }
+
     this.outputPort = outputPort;
     return true;
   }
-  
+
+  public int getMainPort()
+  {
+    return mainPort;
+  }
+
+  public boolean setMainPort(int mainPort)
+  {
+    if (outputPort < 1000 || outputPort > 65535)
+    {
+      return false;
+    }
+
+    this.mainPort = mainPort;
+    return true;
+  }
 }

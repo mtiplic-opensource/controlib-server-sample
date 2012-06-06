@@ -120,7 +120,7 @@ public class Server implements CLServer
     {
       final SystemTray tray = SystemTray.getSystemTray();
       loadConf();
-      connectionManager.openConnection(conf.getInputPort(), conf.getOutputPort());
+      connectionManager.openConnection(conf.getMainPort());
 
       tray.add(serverView.getTrayIcon());
 
