@@ -5,6 +5,8 @@ import com.epita.mti.plic.opensource.controlibserver.jarloader.JarClassLoader;
 import com.epita.mti.plic.opensource.controlibserver.server.CLServer;
 import com.epita.mti.plic.opensource.controlibserversample.observer.JarFileObserver;
 import com.epita.mti.plic.opensource.controlibserversample.view.ServerView;
+import com.epita.mti.plic.opensource.controlibutility.plugins.CLObserver;
+import com.epita.mti.plic.opensource.controlibutility.plugins.CLObserverSend;
 import com.epita.mti.plic.opensource.controlibutility.serialization.ObjectReceiver;
 import com.epita.mti.plic.opensource.controlibutility.serialization.ObjectSender;
 import java.awt.AWTException;
@@ -49,7 +51,7 @@ public class Server implements CLServer
   public void updatePlugins()
   {
     ArrayList<Class<?>> plugins = classLoader.getPlugins();
-   
+
     for (Observer o : currentObservers)
     {
       receiver.deleteObserver(o);
@@ -60,9 +62,26 @@ public class Server implements CLServer
       try
       {
         Constructor<?> constructor = plugin.getConstructor();
-        Observer observer = (Observer) constructor.newInstance();
-        currentObservers.add(observer);
-        receiver.addObserver(observer);
+        Class[] interfaces = plugin.getInterfaces();
+        Observer observer = null;
+        for (Class c : interfaces)
+          {
+            if (c == CLObserver.class)
+            {
+              observer = (CLObserver) constructor.newInstance();
+            }
+            else if (c == CLObserverSend.class)
+            {
+              observer = (CLObserverSend) constructor.newInstance();
+              ((CLObserverSend) observer).setObjectSender(sender);
+              break;
+            }
+          }
+        if (observer != null)
+        {
+          currentObservers.add(observer);
+          receiver.addObserver(observer);
+        }
       }
       catch (InstantiationException ex)
       {

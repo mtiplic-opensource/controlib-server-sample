@@ -2,7 +2,7 @@ package com.epita.mti.plic.opensource.controlibserversample.observer;
 
 import com.epita.mti.plic.opensource.controlibserver.jarloader.JarClassLoader;
 import com.epita.mti.plic.opensource.controlibutility.beans.CLJarFile;
-import com.epita.mti.plic.opensource.controlibutility.plugins.CLPlugin;
+import com.epita.mti.plic.opensource.controlibutility.plugins.CLObserver;
 import com.epita.mti.plic.opensource.controlibutility.serialization.CLSerializable;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -19,7 +19,7 @@ import net.iharder.Base64;
  * The jar content is taken from the stream and put in a jar file in a local
  * directory.
  */
-public class JarFileObserver implements CLPlugin
+public class JarFileObserver implements CLObserver
 {
   private JarClassLoader classLoader;
 
