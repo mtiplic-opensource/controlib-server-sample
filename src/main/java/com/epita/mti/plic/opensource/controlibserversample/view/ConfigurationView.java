@@ -18,21 +18,17 @@ import java.awt.event.WindowEvent;
 public class ConfigurationView extends Frame
 {
 
-  private TextField mainField = new TextField(Server.getServerConfiguration().getMainPort().toString());
   private TextField csField = new TextField(Server.getServerConfiguration().getOutputPort().toString());
   private TextField scField = new TextField(Server.getServerConfiguration().getInputPort().toString());
   private Button cancelButton = new Button("Cancel");
   private Button okButton = new Button("Ok");
-  private ConfigurationView view = null;
-
+  
   public ConfigurationView()
   {
     super("Settings");
 
     Dimension dim = getToolkit().getScreenSize();
-
-    add(new Label("Main communication port:"));
-    add(mainField);
+    
     add(new Label("Server to Client port:"));
     add(csField);
     add(new Label("Client to Server port:"));
@@ -74,7 +70,10 @@ public class ConfigurationView extends Frame
       }
     });
 
-    setLayout(new GridLayout(4, 2));
+    GridLayout gl = new GridLayout(4, 2);
+    gl.setHgap(5);
+    gl.setVgap(5);
+    setLayout(gl);
     setSize(520, 180);
     setLocation((dim.width - getBounds().width) / 2, (dim.height - getBounds().height) / 2);
     setVisible(true);

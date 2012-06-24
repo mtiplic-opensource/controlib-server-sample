@@ -5,7 +5,6 @@ import com.epita.mti.plic.opensource.controlibserver.jarloader.JarClassLoader;
 import com.epita.mti.plic.opensource.controlibserver.server.CLServer;
 import com.epita.mti.plic.opensource.controlibserversample.observer.JarFileObserver;
 import com.epita.mti.plic.opensource.controlibserversample.view.ServerView;
-import com.epita.mti.plic.opensource.controlibutility.plugins.CLObserver;
 import com.epita.mti.plic.opensource.controlibutility.plugins.CLObserverSend;
 import com.epita.mti.plic.opensource.controlibutility.serialization.ObjectReceiver;
 import com.epita.mti.plic.opensource.controlibutility.serialization.ObjectSender;
@@ -35,7 +34,6 @@ public class Server implements CLServer
   private static ObjectReceiver receiver;
   private static ObjectSender sender;
   private static ServerConfiguration conf;
-  private ArrayList<Observer> currentObservers = new ArrayList<Observer>();
 
   public static ServerConfiguration getServerConfiguration()
   {
@@ -50,11 +48,7 @@ public class Server implements CLServer
   {
     ArrayList<Class<?>> plugins = classLoader.getPlugins();
 
-    for (Observer o : currentObservers)
-    {
-      receiver.deleteObserver(o);
-    }
-    currentObservers.clear();
+    receiver.clearPlugins();
     for (Class<?> plugin : plugins)
     {
       try
@@ -63,21 +57,20 @@ public class Server implements CLServer
         Class[] interfaces = plugin.getInterfaces();
         Observer observer = null;
         for (Class c : interfaces)
+        {
+          if (c == Observer.class)
           {
-            if (c == CLObserver.class)
-            {
-              observer = (CLObserver) constructor.newInstance();
-            }
-            else if (c == CLObserverSend.class)
-            {
-              observer = (CLObserverSend) constructor.newInstance();
-              ((CLObserverSend) observer).setObjectSender(sender);
-              break;
-            }
+            observer = (Observer) constructor.newInstance();
           }
+          else if (c == CLObserverSend.class)
+          {
+            observer = (CLObserverSend) constructor.newInstance();
+            ((CLObserverSend) observer).setObjectSender(sender);
+            break;
+          }
+        }
         if (observer != null)
         {
-          currentObservers.add(observer);
           receiver.addObserver(observer);
         }
       }
@@ -139,31 +132,20 @@ public class Server implements CLServer
       JarFileObserver jarFileObserver = new JarFileObserver();
 
       loadConf();
-      connectionManager.openConnection(conf.getMainPort());
+      connectionManager.openPluginConnection(conf.getInputPort(), conf.getOutputPort());
       jarFileObserver.setClassLoader(classLoader);
 
       tray.add(serverView.getTrayIcon());
 
-      Socket mainSocket = connectionManager.getMainSocket().accept();
-      closeQrcodeView();
-
-      InputStreamReader isr = new InputStreamReader(mainSocket.getInputStream());
-      BufferedReader br = new BufferedReader(isr);
-
       while (true)
       {
-        String message = br.readLine();
-        if (message.equals("Pomme"))
-        {
-          OutputStreamWriter osw = new OutputStreamWriter(mainSocket.getOutputStream());
-          osw.write("Cerise");
-          Socket inputSocket = connectionManager.getInputSocket().accept();
-          Socket outputSocket = connectionManager.getOutputSocket().accept();
+        Socket inputSocket = connectionManager.getInputSocket().accept();
+        System.out.println("Connected");
+        //Socket outputSocket = connectionManager.getOutputSocket().accept();
 
-          receiver = new ObjectReceiver(inputSocket, jarFileObserver);
-          sender = new ObjectSender(outputSocket.getOutputStream());
-          new Thread(receiver).start();
-        }
+        receiver = new ObjectReceiver(inputSocket, jarFileObserver);
+        //sender = new ObjectSender(outputSocket.getOutputStream());
+        new Thread(receiver).start();
       }
     }
     catch (IOException ex)

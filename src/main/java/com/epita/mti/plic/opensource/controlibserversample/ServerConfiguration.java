@@ -14,7 +14,6 @@ public class ServerConfiguration implements Serializable
 {
 
   private static final long serialVersionUID = 42L;
-  private int mainPort = 4199;
   private int inputPort = 4200;
   private int outputPort = 4201;
   private String defaultInterface = "wlan0";
@@ -58,22 +57,6 @@ public class ServerConfiguration implements Serializable
     }
 
     this.outputPort = outputPort;
-    return true;
-  }
-
-  public Integer getMainPort()
-  {
-    return mainPort;
-  }
-
-  public boolean setMainPort(int mainPort)
-  {
-    if (outputPort < 1000 || outputPort > 65535)
-    {
-      return false;
-    }
-
-    this.mainPort = mainPort;
     return true;
   }
 }

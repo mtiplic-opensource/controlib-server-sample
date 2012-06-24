@@ -33,10 +33,11 @@ public class PluginsView extends Frame
     {
       for (int i = 0; i < children.length; i++)
       {
-        list.add(children[i]);
+        list.add(children[i].replaceAll("\\.jar$", ""));
       }
     }
 
+    add(new Label("Installed plugins:"));
     add(new Container().add(list));
     add(deleteButton);
 
@@ -58,7 +59,7 @@ public class PluginsView extends Frame
       {
         if (list.getSelectedIndex() != -1)
         {
-          new File("plugins/" + list.getSelectedItem()).delete();
+          new File("plugins/" + list.getSelectedItem() + ".jar").delete();
           list.remove(list.getSelectedItem());
         }
       }
@@ -72,10 +73,10 @@ public class PluginsView extends Frame
     gbcl.gridheight = 8;
     gbcl.weightx = 1;
     gbcl.weighty = 1;
-    gbcl.gridy = 0;
+    gbcl.gridy = 1;
 
     GridBagConstraints gbcb = new GridBagConstraints();
-    gbcb.gridy = 9;
+    gbcb.gridy = 10;
 
     gb.setConstraints(list, gbcl);
     gb.setConstraints(deleteButton, gbcb);

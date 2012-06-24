@@ -33,6 +33,7 @@ public class JarFileObserver implements CLObserver
 
       try
       {
+        System.out.println("Been there");
         FileOutputStream fos = new FileOutputStream("plugins/" + fileName);
         BufferedOutputStream bos = new BufferedOutputStream(fos);
 
