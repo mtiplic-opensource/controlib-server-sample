@@ -6,6 +6,7 @@ import com.epita.mti.plic.opensource.controlibserver.server.CLServer;
 import com.epita.mti.plic.opensource.controlibserversample.observer.JarFileObserver;
 import com.epita.mti.plic.opensource.controlibserversample.view.ServerView;
 import com.epita.mti.plic.opensource.controlibutility.plugins.CLObserverSend;
+import com.epita.mti.plic.opensource.controlibutility.serialization.CLSerializable;
 import com.epita.mti.plic.opensource.controlibutility.serialization.ObjectReceiver;
 import com.epita.mti.plic.opensource.controlibutility.serialization.ObjectSender;
 import java.awt.AWTException;
@@ -51,19 +52,35 @@ public class Server implements CLServer
     receiver.clearPlugins();
     for (Class<?> plugin : plugins)
     {
+      if (plugin.getSuperclass() == CLSerializable.class)
+      {
+        Constructor<?> constructor;
+        try
+        {
+          constructor = plugin.getConstructor();
+          CLSerializable cls = (CLSerializable) constructor.newInstance();
+          ObjectReceiver.beansMap.put(cls.getType(), plugin);
+        }
+        catch (Exception ex)
+        {
+          Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }      
+      }
       try
       {
-        Constructor<?> constructor = plugin.getConstructor();
         Class[] interfaces = plugin.getInterfaces();
         Observer observer = null;
         for (Class c : interfaces)
         {
           if (c == Observer.class)
           {
+            Constructor<?> constructor = plugin.getConstructor();
             observer = (Observer) constructor.newInstance();
+            break;
           }
           else if (c == CLObserverSend.class)
           {
+            Constructor<?> constructor = plugin.getConstructor();
             observer = (CLObserverSend) constructor.newInstance();
             ((CLObserverSend) observer).setObjectSender(sender);
             break;
@@ -74,27 +91,7 @@ public class Server implements CLServer
           receiver.addObserver(observer);
         }
       }
-      catch (InstantiationException ex)
-      {
-        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-      }
-      catch (IllegalAccessException ex)
-      {
-        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-      }
-      catch (IllegalArgumentException ex)
-      {
-        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-      }
-      catch (InvocationTargetException ex)
-      {
-        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-      }
-      catch (NoSuchMethodException ex)
-      {
-        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-      }
-      catch (SecurityException ex)
+      catch (Exception ex)
       {
         Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -140,11 +137,11 @@ public class Server implements CLServer
       while (true)
       {
         Socket inputSocket = connectionManager.getInputSocket().accept();
+        Socket outputSocket = connectionManager.getOutputSocket().accept();
         System.out.println("Connected");
-        //Socket outputSocket = connectionManager.getOutputSocket().accept();
 
         receiver = new ObjectReceiver(inputSocket, jarFileObserver);
-        //sender = new ObjectSender(outputSocket.getOutputStream());
+        sender = new ObjectSender(outputSocket.getOutputStream());
         new Thread(receiver).start();
       }
     }
