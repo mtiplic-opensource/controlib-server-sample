@@ -75,7 +75,9 @@ public class Server implements CLServer
         {
           constructor = plugin.getConstructor();
           CLSerializable cls = (CLSerializable) constructor.newInstance();
-          ObjectReceiver.beansMap.put(cls.getType(), plugin);
+          if (!ObjectReceiver.beansMap.containsKey(cls.getType()))
+            ObjectReceiver.beansMap.put(cls.getType(), plugin);
+          
         }
         catch (Exception ex)
         {
