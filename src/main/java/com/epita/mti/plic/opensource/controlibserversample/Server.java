@@ -52,7 +52,22 @@ public class Server implements CLServer
     receiver.clearPlugins();
     for (Class<?> plugin : plugins)
     {
-      if (plugin.getSuperclass() == CLSerializable.class)
+      boolean isSerializable = false;
+      Class<?> superClass = plugin.getSuperclass();
+      
+      while (superClass != null)
+      {
+        if (superClass == CLSerializable.class)
+        {
+          isSerializable = true;
+          break;
+        }
+        else
+        {
+          superClass = superClass.getSuperclass();
+        }
+      }
+      if (isSerializable)
       {
         Constructor<?> constructor;
         try
