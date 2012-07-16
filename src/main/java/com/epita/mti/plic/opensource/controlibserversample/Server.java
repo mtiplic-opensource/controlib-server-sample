@@ -5,6 +5,7 @@ import com.epita.mti.plic.opensource.controlibserver.jarloader.JarClassLoader;
 import com.epita.mti.plic.opensource.controlibserver.server.CLServer;
 import com.epita.mti.plic.opensource.controlibserversample.observer.JarFileObserver;
 import com.epita.mti.plic.opensource.controlibserversample.view.ServerView;
+import com.epita.mti.plic.opensource.controlibutility.plugins.CLObserver;
 import com.epita.mti.plic.opensource.controlibutility.plugins.CLObserverSend;
 import com.epita.mti.plic.opensource.controlibutility.serialization.CLSerializable;
 import com.epita.mti.plic.opensource.controlibutility.serialization.ObjectReceiver;
@@ -91,6 +92,12 @@ public class Server implements CLServer
           {
             Constructor<?> constructor = plugin.getConstructor();
             observer = (Observer) constructor.newInstance();
+            break;
+          }
+          if (c == CLObserver.class)
+          {
+            Constructor<?> constructor = plugin.getConstructor();
+            observer = (CLObserver) constructor.newInstance();
             break;
           }
           else if (c == CLObserverSend.class)
