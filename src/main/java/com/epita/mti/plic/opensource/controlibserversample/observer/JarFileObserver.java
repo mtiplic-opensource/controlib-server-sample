@@ -22,7 +22,8 @@ import net.iharder.Base64;
 public class JarFileObserver implements CLObserver
 {
   private JarClassLoader classLoader;
-
+  private int index;
+  
   @Override
   public void update(Observable o, Object arg)
   {
@@ -41,7 +42,7 @@ public class JarFileObserver implements CLObserver
         bos.flush();
         fos.close();
         try {
-          classLoader.addPlugins("plugins/" + fileName);
+          classLoader.addPlugins("plugins/" + fileName, index);
         } catch (Exception ex) {
           Logger.getLogger(JarFileObserver.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,4 +63,17 @@ public class JarFileObserver implements CLObserver
   {
     this.classLoader = classLoader;
   }
+
+  public int getIndex()
+  {
+    return index;
+  }
+
+  public void setIndex(int index)
+  {
+    this.index = index;
+  }
+  
 }
+
+

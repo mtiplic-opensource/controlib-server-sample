@@ -15,7 +15,6 @@ import java.awt.Frame;
 import java.awt.SystemTray;
 import java.io.*;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Observer;
@@ -33,8 +32,8 @@ public class Server implements CLServer
   private static ServerView serverView = new ServerView();
   private static Frame qrcodeView = null;
   private JarClassLoader classLoader = new JarClassLoader(this);
-  private static ObjectReceiver receiver;
-  private static ObjectSender sender;
+  private static ArrayList<ObjectReceiver> receivers = new ArrayList<>();
+  private static ArrayList<ObjectSender> senders = new ArrayList<>();
   private static ServerConfiguration conf;
 
   public static ServerConfiguration getServerConfiguration()
@@ -46,16 +45,16 @@ public class Server implements CLServer
    * This method update the plugins available for the server
    */
   @Override
-  public void updatePlugins()
+  public void updatePlugins(int index)
   {
     ArrayList<Class<?>> plugins = classLoader.getPlugins();
 
-    receiver.clearPlugins();
+    receivers.get(index).clearPlugins();
     for (Class<?> plugin : plugins)
     {
       boolean isSerializable = false;
       Class<?> superClass = plugin.getSuperclass();
-      
+
       while (superClass != null)
       {
         if (superClass == CLSerializable.class)
@@ -75,14 +74,16 @@ public class Server implements CLServer
         {
           constructor = plugin.getConstructor();
           CLSerializable cls = (CLSerializable) constructor.newInstance();
-          if (!ObjectReceiver.beansMap.containsKey(cls.getType()))
-            ObjectReceiver.beansMap.put(cls.getType(), plugin);
-          
+          if (!receivers.get(index).getBeansMap().containsKey(cls.getType()))
+          {
+            receivers.get(index).getBeansMap().put(cls.getType(), plugin);
+          }
+
         }
         catch (Exception ex)
         {
           Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        }      
+        }
       }
       try
       {
@@ -106,13 +107,13 @@ public class Server implements CLServer
           {
             Constructor<?> constructor = plugin.getConstructor();
             observer = (CLObserverSend) constructor.newInstance();
-            ((CLObserverSend) observer).setObjectSender(sender);
+            ((CLObserverSend) observer).setObjectSender(senders.get(index));
             break;
           }
         }
         if (observer != null)
         {
-          receiver.addObserver(observer);
+          receivers.get(index).addObserver(observer);
         }
       }
       catch (Exception ex)
@@ -150,11 +151,10 @@ public class Server implements CLServer
     try
     {
       final SystemTray tray = SystemTray.getSystemTray();
-      JarFileObserver jarFileObserver = new JarFileObserver();
+
 
       loadConf();
       connectionManager.openPluginConnection(conf.getInputPort(), conf.getOutputPort());
-      jarFileObserver.setClassLoader(classLoader);
 
       tray.add(serverView.getTrayIcon());
 
@@ -164,9 +164,14 @@ public class Server implements CLServer
         Socket outputSocket = connectionManager.getOutputSocket().accept();
         System.out.println("Connected");
 
-        receiver = new ObjectReceiver(inputSocket, jarFileObserver);
-        sender = new ObjectSender(outputSocket.getOutputStream());
-        new Thread(receiver).start();
+        JarFileObserver jarFileObserver = new JarFileObserver();
+        jarFileObserver.setClassLoader(classLoader);
+        jarFileObserver.setIndex(receivers.size());
+
+        ObjectReceiver or = new ObjectReceiver(inputSocket, jarFileObserver);
+        receivers.add(or);
+        senders.add(new ObjectSender(outputSocket.getOutputStream()));
+        new Thread(or).start();
       }
     }
     catch (IOException ex)
