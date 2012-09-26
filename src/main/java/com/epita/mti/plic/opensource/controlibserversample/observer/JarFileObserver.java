@@ -34,15 +34,25 @@ public class JarFileObserver implements CLObserver
 
       try
       {
-        System.out.println("Been there");
-        FileOutputStream fos = new FileOutputStream("plugins/" + fileName);
-        BufferedOutputStream bos = new BufferedOutputStream(fos);
-
-        bos.write(Base64.decode(fileContent));
-        bos.flush();
-        fos.close();
+        //System.out.println("Been there");
+        FileOutputStream tmpFos = new FileOutputStream("plugins/tmp/" + fileName);
+        BufferedOutputStream tmpBos = new BufferedOutputStream(tmpFos);
+        tmpBos.write(Base64.decode(fileContent));
+        tmpBos.flush();
+        tmpBos.close();
+        
+        
         try {
-          classLoader.addPlugins("plugins/" + fileName, index);
+          if (classLoader.testPlugins("plugins/" + fileName, index))
+          {
+            FileOutputStream fos = new FileOutputStream("plugins/" + fileName);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+
+            bos.write(Base64.decode(fileContent));
+            bos.flush();
+            fos.close();
+            classLoader.addPlugins("plugins/" + fileName, index);
+          }
         } catch (Exception ex) {
           Logger.getLogger(JarFileObserver.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -73,6 +83,11 @@ public class JarFileObserver implements CLObserver
   {
     this.index = index;
   }
+
+    @Override
+    public String getVersion() {
+        return "1.0";
+    }
   
 }
 
