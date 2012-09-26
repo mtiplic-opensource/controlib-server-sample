@@ -43,7 +43,7 @@ public class JarFileObserver implements CLObserver
         
         
         try {
-          if (classLoader.testPlugins("plugins/" + fileName, index))
+          if (classLoader.testPlugins("plugins/tmp/" + fileName, index))
           {
             FileOutputStream fos = new FileOutputStream("plugins/" + fileName);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
